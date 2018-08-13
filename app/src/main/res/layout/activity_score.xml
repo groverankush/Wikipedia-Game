@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_normal"
+    tools:context=".ui.score.ScoreActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/you_scored"
+        android:textColor="@android:color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <TextView
+            android:id="@+id/tv_score"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:autoSizeTextType="uniform"
+            android:layout_gravity="center"
+            android:text="9" />
+
+        <TextView
+            android:id="@+id/tv_out_of"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/10" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/btn_results"
+            android:layout_width="0dp"
+            android:padding="@dimen/margin_large"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/results" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"/>
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/btn_play_again"
+            android:layout_width="0dp"
+            android:padding="@dimen/margin_large"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/play_again" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
