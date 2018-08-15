@@ -8,4 +8,8 @@
     <string name="you_scored">You Scored</string>
     <string name="results">Results</string>
     <string name="play_again">Play Again</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="submit">Submit</string>
 </resources>

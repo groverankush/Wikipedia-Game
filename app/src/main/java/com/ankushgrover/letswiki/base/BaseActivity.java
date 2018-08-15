@@ -2,9 +2,14 @@ package com.ankushgrover.letswiki.base;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import com.ankushgrover.letswiki.R;
 
 /**
  * Created by Ankush Grover(ankush.grover@finoit.co.in) on 11/6/18.
@@ -12,6 +17,7 @@ import android.widget.Toast;
 abstract public class BaseActivity extends AppCompatActivity {
 
     private Toast toast;
+    private Snackbar snack;
 
     public void initializeActionBar(String title, boolean isBackEnabled) {
         if (getSupportActionBar() != null) {
@@ -78,6 +84,8 @@ abstract public class BaseActivity extends AppCompatActivity {
     }
 
 
+
+
     /**
      * Method used to display short duration toast
      *
@@ -100,5 +108,27 @@ abstract public class BaseActivity extends AppCompatActivity {
      */
     public void displayToast(int resId) {
         displayToast(getString(resId));
+    }
+
+    /**
+     * Method to display short snackbar
+     *
+     * @param resId
+     */
+    public void showSnack(@StringRes int resId) {
+        showSnack(getString(resId));
+    }
+
+    /**
+     * Method to display short snackbar
+     *
+     * @param message
+     */
+    public void showSnack(@NonNull String message) {
+        if (snack != null && snack.isShown())
+            snack.dismiss();
+        snack = Snackbar.make(findViewById(R.id.container), message, Snackbar.LENGTH_SHORT);
+        snack.show();
+
     }
 }
