@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,22 +78,34 @@ public class WikiFragment extends BaseFragment {
 
 
         initView(view);
-        //TODO if isDifficult
-        initTimer();
+        if (mListener.getMainViewModel().isDifficult() && !mIsResult)
+            initTimer();
     }
 
     private void initView(View view) {
         mSubmitFab = view.findViewById(R.id.fab_submit);
         mSubmitTv = view.findViewById(R.id.tv_submit);
 
-        mSubmitTv.setVisibility(View.GONE);
-        mSubmitFab.setImageResource(R.drawable.ic_check);
+        if (mIsResult) {
+            mSubmitTv.setVisibility(View.GONE);
+            mSubmitFab.setImageResource(R.drawable.ic_close);
+        } else if (mListener.getMainViewModel().isDifficult()) {
+            mSubmitTv.setVisibility(View.VISIBLE);
+            mSubmitFab.setImageResource(0);
+        } else {
+            mSubmitTv.setVisibility(View.GONE);
+            mSubmitFab.setImageResource(R.drawable.ic_check);
+        }
+
 
         mSubmitFab.setOnClickListener(v -> {
-            //TODO Add Difficulty check from view model.
-            //      TODO If difficult show dialog first
 
-            mListener.submit();
+            if (mIsResult)
+                mListener.closeResultWiki();
+            else if (mListener.getMainViewModel().isDifficult())
+                showSubmitDialog(view.getContext());
+            else
+                mListener.submit();
         });
     }
 
@@ -115,11 +128,28 @@ public class WikiFragment extends BaseFragment {
         mTimer.start();
     }
 
+    private void showSubmitDialog(Context context) {
+
+        new AlertDialog.Builder(context)
+                .setTitle("Submit")
+                .setMessage("Do you want to submit?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    cancelTimer();
+                    dialog.dismiss();
+                    mListener.submit();
+                }).setNegativeButton("No", ((dialog, which) -> dialog.dismiss()
+        )).create().show();
+    }
+
+    private void cancelTimer() {
+        if (mTimer != null)
+            mTimer.cancel();
+    }
+
     @Override
     public void onPause() {
         super.onPause();
-        if (mTimer != null)
-            mTimer.cancel();
+        cancelTimer();
     }
 
     @Override
@@ -128,8 +158,10 @@ public class WikiFragment extends BaseFragment {
         super.onSaveInstanceState(outState);
     }
 
-    public interface WikiListener {
+    public interface WikiListener extends BaseFragmentListener {
         void submit();
+
+        void closeResultWiki();
     }
 
 }

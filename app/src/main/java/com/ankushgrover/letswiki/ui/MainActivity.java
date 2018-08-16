@@ -1,5 +1,6 @@
 package com.ankushgrover.letswiki.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
@@ -47,7 +48,7 @@ public class MainActivity extends BaseActivity implements LaunchFragment.LaunchF
         currentFragment = fragment;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (addTransitions)
-            ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         ft.replace(R.id.container, fragment);
         if (addToBackStack)
             ft.addToBackStack(null);
@@ -64,12 +65,18 @@ public class MainActivity extends BaseActivity implements LaunchFragment.LaunchF
 
     @Override
     public void startGame() {
+
         replaceFragment(WikiFragment.newInstance(false), true);
     }
 
     @Override
     public void submit() {
         replaceFragment(new ScoreFragment(), true);
+    }
+
+    @Override
+    public void closeResultWiki() {
+        onBackPressed();
     }
 
     @Override
@@ -80,5 +87,10 @@ public class MainActivity extends BaseActivity implements LaunchFragment.LaunchF
     @Override
     public void playAgain() {
         replaceFragment(new LaunchFragment(), true);
+    }
+
+    @Override
+    public MainViewModel getMainViewModel() {
+        return ViewModelProviders.of(this).get(MainViewModel.class);
     }
 }

@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ankushgrover.letswiki.ui.MainViewModel;
+
 public class BaseFragment extends Fragment {
 
     private Toast toast;
@@ -86,5 +88,9 @@ public class BaseFragment extends Fragment {
      */
     public void displayToast(int resId) {
         displayToast(getString(resId));
+    }
+
+    protected interface BaseFragmentListener {
+        MainViewModel getMainViewModel();
     }
 }
