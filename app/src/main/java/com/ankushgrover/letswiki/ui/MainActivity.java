@@ -16,6 +16,17 @@ public class MainActivity extends BaseActivity implements LaunchFragment.LaunchF
     private BaseFragment currentFragment;
 
     @Override
+    public void onBackPressed() {
+
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            if (getSupportFragmentManager().popBackStackImmediate())
+                currentFragment = (BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+        } else
+            super.onBackPressed();
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -36,7 +47,7 @@ public class MainActivity extends BaseActivity implements LaunchFragment.LaunchF
         currentFragment = fragment;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (addTransitions)
-            ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         ft.replace(R.id.container, fragment);
         if (addToBackStack)
             ft.addToBackStack(null);
