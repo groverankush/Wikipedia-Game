@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.RadioButton;
 
 import com.ankushgrover.letswiki.R;
 import com.ankushgrover.letswiki.base.BaseFragment;
+import com.ankushgrover.letswiki.ui.scoreglobalrank.ScoreGlobalRankFragment;
 
 /**
  * Created by Ankush Grover(ankushgrover02@gmail.com) on 15/8/18.
@@ -55,6 +57,8 @@ public class LaunchFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        getChildFragmentManager().beginTransaction().replace(R.id.fl_score_container, new ScoreGlobalRankFragment()).commit();
 
         RadioButton radioEasy = view.findViewById(R.id.radio_easy);
         RadioButton radioDifficult = view.findViewById(R.id.radio_difficult);

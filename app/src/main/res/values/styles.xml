@@ -8,12 +8,29 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-<!--    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
-        &lt;!&ndash; Customize your theme here. &ndash;&gt;
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>-->
+    <!--    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+            &lt;!&ndash; Customize your theme here. &ndash;&gt;
+            <item name="colorPrimary">@color/colorPrimary</item>
+            <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+            <item name="colorAccent">@color/colorAccent</item>
+        </style>-->
+
+
+    <style name="FirstPosition">
+        <item name="colorTrophy">@color/gold</item>
+    </style>
+
+    <style name="SecondPosition">
+        <item name="colorTrophy">@color/silver</item>
+    </style>
+
+    <style name="ThirdPosition">
+        <item name="colorTrophy">@color/bronze</item>
+    </style>
+
+    <style name="OtherPositions">
+        <item name="colorTrophy">@android:color/transparent</item>
+    </style>
 
 
 </resources>

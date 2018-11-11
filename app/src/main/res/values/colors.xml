@@ -7,4 +7,8 @@
     <color name="scoreColor">@android:color/black</color>
 
     <color name="fab_text_color">@android:color/white</color>
+
+    <color name="gold">#FFFFD700</color>
+    <color name="silver">#FFC0C0C0</color>
+    <color name="bronze">#FFCD7F32</color>
 </resources>

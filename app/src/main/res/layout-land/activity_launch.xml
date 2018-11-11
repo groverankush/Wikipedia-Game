@@ -14,53 +14,63 @@
         android:textColor="@android:color/black"
         app:autoSizeTextType="uniform" />
 
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_weight="1">
 
-
-        <RadioGroup
+        <FrameLayout
+            android:id="@+id/fl_score_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_gravity="end" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/difficulty"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
-
-            <android.support.v7.widget.AppCompatRadioButton
-                android:id="@+id/radio_easy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/easy" />
-
-            <android.support.v7.widget.AppCompatRadioButton
-                android:id="@+id/radio_difficult"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/hard" />
-        </RadioGroup>
-
-
-        <android.support.design.button.MaterialButton
-            android:id="@+id/btn_start"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_large"
-            android:text="@string/start_game" />
+            android:orientation="vertical">
 
-    </LinearLayout>
 
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/difficulty"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/radio_easy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/easy" />
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/radio_difficult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hard" />
+            </RadioGroup>
+
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/btn_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_large"
+                android:text="@string/start_game" />
+
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>
