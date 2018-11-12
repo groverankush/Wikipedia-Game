@@ -1,4 +1,4 @@
-package com.ankushgrover.letswiki.ui;
+package com.ankushgrover.letswiki.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
 

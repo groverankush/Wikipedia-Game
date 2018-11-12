@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import com.ankushgrover.letswiki.ui.MainViewModel;
+import com.ankushgrover.letswiki.ui.viewmodel.MainViewModel;
 
 public class BaseFragment extends Fragment {
 

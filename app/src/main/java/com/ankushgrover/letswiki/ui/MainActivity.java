@@ -9,6 +9,7 @@ import com.ankushgrover.letswiki.base.BaseActivity;
 import com.ankushgrover.letswiki.base.BaseFragment;
 import com.ankushgrover.letswiki.ui.launch.LaunchFragment;
 import com.ankushgrover.letswiki.ui.score.ScoreFragment;
+import com.ankushgrover.letswiki.ui.viewmodel.MainViewModel;
 import com.ankushgrover.letswiki.ui.wiki.WikiFragment;
 
 public class MainActivity extends BaseActivity implements LaunchFragment.LaunchFragmentListener, WikiFragment.WikiListener, ScoreFragment.ScoreListener {
@@ -37,6 +38,7 @@ public class MainActivity extends BaseActivity implements LaunchFragment.LaunchF
             replaceFragment(currentFragment, false);
         } else
             replaceFragment(new LaunchFragment(), false);
+
     }
 
 
