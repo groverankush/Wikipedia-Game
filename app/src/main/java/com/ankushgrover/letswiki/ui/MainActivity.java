@@ -9,8 +9,8 @@ import com.ankushgrover.letswiki.base.BaseActivity;
 import com.ankushgrover.letswiki.base.BaseFragment;
 import com.ankushgrover.letswiki.ui.launch.LaunchFragment;
 import com.ankushgrover.letswiki.ui.score.ScoreFragment;
-import com.ankushgrover.letswiki.ui.viewmodel.MainViewModel;
 import com.ankushgrover.letswiki.ui.wiki.WikiFragment;
+import com.ankushgrover.letswiki.viewmodel.MainViewModel;
 
 public class MainActivity extends BaseActivity implements LaunchFragment.LaunchFragmentListener, WikiFragment.WikiListener, ScoreFragment.ScoreListener {
 

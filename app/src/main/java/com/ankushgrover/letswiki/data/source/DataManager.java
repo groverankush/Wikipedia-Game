@@ -1,5 +1,6 @@
 package com.ankushgrover.letswiki.data.source;
 
+import com.ankushgrover.letswiki.data.model.title.RandomTitleResponse;
 import com.ankushgrover.letswiki.data.source.remote.WikiDataSource;
 
 import retrofit2.Retrofit;
@@ -20,7 +21,7 @@ public class DataManager {
     private WikiDataSource initDataSource() {
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://en.wikipedia.org/w/api.php")
+                .baseUrl("https://en.wikipedia.org/w/api.php/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -32,7 +33,6 @@ public class DataManager {
             instance = new DataManager();
         return instance;
     }
-
 
     public WikiDataSource getWikiDataSource() {
         return wikiDataSource;

@@ -1,5 +1,8 @@
 package com.ankushgrover.letswiki.ui.wiki;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 
 import com.ankushgrover.letswiki.R;
 import com.ankushgrover.letswiki.base.BaseFragment;
+import com.ankushgrover.letswiki.viewmodel.GameViewModel;
 
 /**
  * Created by Ankush Grover(ankushgrover02@gmail.com) on 15/8/18.
@@ -78,6 +82,8 @@ public class WikiFragment extends BaseFragment {
 
 
         initView(view);
+        GameViewModel model = ViewModelProviders.of(this).get(GameViewModel.class);
+        model.getTitleList();
         if (mListener.getMainViewModel().isDifficult() && !mIsResult)
             initTimer();
     }

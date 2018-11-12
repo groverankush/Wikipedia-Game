@@ -3,8 +3,6 @@ package com.ankushgrover.letswiki.data.model.article;
 
 import java.util.List;
 
-import com.ankushgrover.letswiki.Section;
-import com.ankushgrover.letswiki.Thumb;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

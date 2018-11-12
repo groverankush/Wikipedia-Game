@@ -1,7 +1,6 @@
 
 package com.ankushgrover.letswiki.data.model.article;
 
-import com.ankushgrover.letswiki.Mobileview;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
