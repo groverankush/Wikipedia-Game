@@ -6,11 +6,13 @@ package com.ankushgrover.letswiki.data.model;
 public class Word {
     private int startIndex;
     private int endIndex;
+    private int wordIndex;
     private String word;
 
-    public Word(int startIndex, int endIndex, String word) {
+    public Word(int startIndex, int endIndex, int wordIndex, String word) {
         this.startIndex = startIndex;
         this.endIndex = endIndex;
+        this.wordIndex = wordIndex;
         this.word = word;
     }
 
@@ -36,5 +38,13 @@ public class Word {
 
     public void setEndIndex(int endIndex) {
         this.endIndex = endIndex;
+    }
+
+    public int getWordIndex() {
+        return wordIndex;
+    }
+
+    public void setWordIndex(int wordIndex) {
+        this.wordIndex = wordIndex;
     }
 }

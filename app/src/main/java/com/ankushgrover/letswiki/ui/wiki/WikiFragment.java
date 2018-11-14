@@ -1,8 +1,5 @@
 package com.ankushgrover.letswiki.ui.wiki;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,12 +11,17 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ankushgrover.letswiki.R;
 import com.ankushgrover.letswiki.base.BaseFragment;
-import com.ankushgrover.letswiki.data.model.CompleteArticle;
 import com.ankushgrover.letswiki.viewmodel.GameViewModel;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by Ankush Grover(ankushgrover02@gmail.com) on 15/8/18.
@@ -34,6 +36,12 @@ public class WikiFragment extends BaseFragment {
     private TextView mSubmitTv;
     private CountDownTimer mTimer;
     private long mTimeLeft = 60 * 1000; // milliseconds.
+    private GameViewModel mGameModel;
+    private ProgressBar mProgress;
+    private FrameLayout mBottomFabContainer;
+    private ScrollView mScrollView;
+    private TextView mPara, mTitle;
+    private ImageView mIcon;
 
     public WikiFragment() {
     }
@@ -72,7 +80,6 @@ public class WikiFragment extends BaseFragment {
         }
 
 
-
     }
 
     @Nullable
@@ -87,25 +94,47 @@ public class WikiFragment extends BaseFragment {
 
 
         initView(view);
-        GameViewModel model = ViewModelProviders.of(this).get(GameViewModel.class);
-        // TODO Move this to another function
-        model.article.observe(this, new Observer<CompleteArticle>() {
-            @Override
-            public void onChanged(@Nullable CompleteArticle completeArticle) {
-
-            }
-        });
-        if (model.article.getValue() == null)
-            model.getTitleList();
+        mGameModel = ViewModelProviders.of(this).get(GameViewModel.class);
+        observeArticle();
         if (mListener.getMainViewModel().isDifficult() && !mIsResult)
             initTimer();
     }
 
-    private void observeArticle(){
+    private void observeArticle() {
+        mGameModel.article.observe(this, completeArticle -> {
+            if (completeArticle == null) {
+                Toast.makeText(getActivity(), R.string.generic_error, Toast.LENGTH_SHORT).show();
+                mListener.playAgain();
+                return;
+            }
+
+            mTitle.setText(completeArticle.getTitle());
+            Picasso.get().load(completeArticle.getImageUrl()).into(mIcon);
+
+
+        });
+        if (mGameModel.article.getValue() == null) {
+            manageProgressBar(true);
+            mGameModel.getTitleList();
+        } else manageProgressBar(false);
+
+    }
+
+    private void manageProgressBar(boolean isVisible) {
+
+        mProgress.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        mScrollView.setVisibility(isVisible ? View.GONE : View.VISIBLE);
+        mBottomFabContainer.setVisibility(isVisible ? View.GONE : View.VISIBLE);
 
     }
 
     private void initView(View view) {
+        mTitle = view.findViewById(R.id.tv_title);
+        mIcon = view.findViewById(R.id.iv_icon);
+        mPara = view.findViewById(R.id.tv_para);
+        mScrollView = view.findViewById(R.id.scroll_view);
+        mBottomFabContainer = view.findViewById(R.id.bottom_fab);
+        mProgress = view.findViewById(R.id.progress);
         mSubmitFab = view.findViewById(R.id.fab_submit);
         mSubmitTv = view.findViewById(R.id.tv_submit);
 
@@ -185,6 +214,9 @@ public class WikiFragment extends BaseFragment {
         void submit();
 
         void closeResultWiki();
+
+        void playAgain();
+
     }
 
 }

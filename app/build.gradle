@@ -42,5 +42,8 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.1"
     //jsoup
     implementation 'org.jsoup:jsoup:1.11.3'
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 
 }

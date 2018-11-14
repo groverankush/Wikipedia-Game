@@ -38,6 +38,9 @@ public class GameViewModel extends ViewModel {
 
     public void getTitleList() {
 
+        if (article.getValue() != null)
+            return;
+
         long days = 7 * 24 * 60 * 60 * 1000;
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
         String date = df.format(new Date(System.currentTimeMillis() - days));
@@ -68,6 +71,10 @@ public class GameViewModel extends ViewModel {
                 requestFailed(t);
             }
         });
+    }
+
+    public void finishGame() {
+        article.setValue(null);
     }
 
     private void getCompleteArticle(String title) {
