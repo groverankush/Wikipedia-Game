@@ -1,5 +1,6 @@
 package com.ankushgrover.letswiki.ui.wiki;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.ankushgrover.letswiki.R;
 import com.ankushgrover.letswiki.base.BaseFragment;
+import com.ankushgrover.letswiki.data.model.CompleteArticle;
 import com.ankushgrover.letswiki.viewmodel.GameViewModel;
 
 /**
@@ -68,6 +70,9 @@ public class WikiFragment extends BaseFragment {
         if (savedInstanceState != null) {
             mTimeLeft = savedInstanceState.getLong(KEY_TIME_LEFT, 60000);
         }
+
+
+
     }
 
     @Nullable
@@ -83,9 +88,21 @@ public class WikiFragment extends BaseFragment {
 
         initView(view);
         GameViewModel model = ViewModelProviders.of(this).get(GameViewModel.class);
-        model.getTitleList();
+        // TODO Move this to another function
+        model.article.observe(this, new Observer<CompleteArticle>() {
+            @Override
+            public void onChanged(@Nullable CompleteArticle completeArticle) {
+
+            }
+        });
+        if (model.article.getValue() == null)
+            model.getTitleList();
         if (mListener.getMainViewModel().isDifficult() && !mIsResult)
             initTimer();
+    }
+
+    private void observeArticle(){
+
     }
 
     private void initView(View view) {

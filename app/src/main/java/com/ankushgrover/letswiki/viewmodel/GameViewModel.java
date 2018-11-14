@@ -2,17 +2,25 @@ package com.ankushgrover.letswiki.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.ankushgrover.letswiki.data.model.CompleteArticle;
 import com.ankushgrover.letswiki.data.model.article.ArticleResponse;
+import com.ankushgrover.letswiki.data.model.article.Mobileview;
 import com.ankushgrover.letswiki.data.model.title.Article;
 import com.ankushgrover.letswiki.data.model.title.RandomTitleResponse;
 import com.ankushgrover.letswiki.data.source.DataManager;
+import com.ankushgrover.letswiki.utils.Utils;
+
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.concurrent.ThreadLocalRandom;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,7 +33,8 @@ public class GameViewModel extends ViewModel {
 
     private static final String TAG = GameViewModel.class.getSimpleName();
 
-    private MutableLiveData<CompleteArticle> article;
+    public MutableLiveData<CompleteArticle> article = new MutableLiveData<>();
+
 
     public void getTitleList() {
 
@@ -40,37 +49,38 @@ public class GameViewModel extends ViewModel {
             public void onResponse(Call<RandomTitleResponse> call, Response<RandomTitleResponse> response) {
                 Log.d(TAG, "onResponse");
                 if (response.isSuccessful() && response.body() != null) {
+                    String title = null;
                     for (Article a : response.body().getItems().get(0).getArticles()) {
                         if (!a.getArticle().contains("Search") && !a.getArticle().contains("Main_Page")) {
-                            CompleteArticle temp = new CompleteArticle(a.getArticle());
-                            article.setValue(temp);
+                            title = a.getArticle();
                             break;
                         }
                     }
-                    getCompleteArticle();
+                    getCompleteArticle(title);
                 } else {
-                    article.setValue(null);
+                    requestFailed(null);
                 }
 
             }
 
             @Override
             public void onFailure(Call<RandomTitleResponse> call, Throwable t) {
-                Log.e(TAG, t.getMessage());
-                article.setValue(null);
+                requestFailed(t);
             }
         });
     }
 
-    public void getCompleteArticle() {
-        Call<ArticleResponse> call = DataManager.getInstance().getWikiDataSource().fetchArticle(article.getValue().getTitle());
+    private void getCompleteArticle(String title) {
+        if (TextUtils.isEmpty(title))
+            requestFailed(null);
+        Call<ArticleResponse> call = DataManager.getInstance().getWikiDataSource().fetchArticle(title);
         call.enqueue(new Callback<ArticleResponse>() {
             @Override
             public void onResponse(Call<ArticleResponse> call, Response<ArticleResponse> response) {
-                if (response.isSuccessful()) {
-                    // TODO Parse data and add to the LiveData.
+                if (response.isSuccessful() && response.body() != null) {
+                    parseData(response.body().getMobileview());
                 } else {
-                    article.setValue(null);
+                    requestFailed(null);
                 }
             }
 
@@ -81,4 +91,32 @@ public class GameViewModel extends ViewModel {
         });
     }
 
+    private void parseData(Mobileview body) {
+        // Parse Image and Title
+        CompleteArticle a = new CompleteArticle(body.getDisplaytitle(), body.getThumb().getUrl());
+
+        // Parse Complete text
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 5 && i < body.getSections().size(); i++)
+            builder.append(Jsoup.clean(body.getSections().get(0).getText(), Whitelist.none()));
+
+        a.setCompleteText(builder.toString());
+
+        // Extract words.
+        a.setWords(Utils.splitWords(a.getCompleteText()));
+
+        // Generate random indexes for random words.
+        a.setMissingWordIndexes(new HashSet<>());
+        while (a.getMissingWordIndexes().size() < 10) {
+            int randomIndex = ThreadLocalRandom.current().nextInt(0, a.getWords().length);
+            a.getMissingWordIndexes().add(randomIndex);
+        }
+
+        article.setValue(a);
+    }
+
+    private void requestFailed(Throwable throwable) {
+        Log.e(TAG, throwable == null ? "Request Failed" : throwable.getMessage());
+        article.setValue(null);
+    }
 }
