@@ -1,6 +1,6 @@
 package com.ankushgrover.letswiki.data.model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -12,12 +12,11 @@ public class CompleteArticle {
     private String completeText;
     private Word[] words;
     private HashSet<Integer> missingWordIndexes;
-    // UNUSED
-    private ArrayList<String> userWords;
-    private String wikiText;
+    private HashMap<Integer, Word> userWords;
 
     public CompleteArticle(String title, String imageUrl) {
         this.title = title;
+        this.imageUrl = imageUrl;
     }
 
     public String getTitle() {
@@ -52,20 +51,12 @@ public class CompleteArticle {
         this.words = words;
     }
 
-    public ArrayList<String> getUserWords() {
+    public HashMap<Integer, Word> getUserWords() {
         return userWords;
     }
 
-    public void setUserWords(ArrayList<String> userWords) {
+    public void setUserWords(HashMap userWords) {
         this.userWords = userWords;
-    }
-
-    public String getWikiText() {
-        return wikiText;
-    }
-
-    public void setWikiText(String wikiText) {
-        this.wikiText = wikiText;
     }
 
     public HashSet<Integer> getMissingWordIndexes() {

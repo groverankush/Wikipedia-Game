@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ankushgrover.letswiki.data.model.CompleteArticle;
+import com.ankushgrover.letswiki.data.model.Word;
 import com.ankushgrover.letswiki.data.model.article.ArticleResponse;
 import com.ankushgrover.letswiki.data.model.article.Mobileview;
 import com.ankushgrover.letswiki.data.model.title.Article;
@@ -18,6 +19,7 @@ import org.jsoup.safety.Whitelist;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
@@ -41,7 +43,7 @@ public class GameViewModel extends ViewModel {
         if (article.getValue() != null)
             return;
 
-        long days = 7 * 24 * 60 * 60 * 1000;
+        long days = ThreadLocalRandom.current().nextInt(0, 10) * 24 * 60 * 60 * 1000;
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
         String date = df.format(new Date(System.currentTimeMillis() - days));
 
@@ -53,13 +55,19 @@ public class GameViewModel extends ViewModel {
                 Log.d(TAG, "onResponse");
                 if (response.isSuccessful() && response.body() != null) {
                     String title = null;
-                    for (Article a : response.body().getItems().get(0).getArticles()) {
+                    int times = 0;
+                    while (times++ < 10) {
+                        int randomIndex = ThreadLocalRandom.current().nextInt(0, response.body().getItems().get(0).getArticles().size());
+                        Article a = response.body().getItems().get(0).getArticles().get(randomIndex);
                         if (!a.getArticle().contains("Search") && !a.getArticle().contains("Main_Page")) {
                             title = a.getArticle();
                             break;
                         }
                     }
-                    getCompleteArticle(title);
+                    if (title == null)
+                        requestFailed(new Throwable("Unable to fetch article."));
+                    else
+                        getCompleteArticle(title);
                 } else {
                     requestFailed(null);
                 }
@@ -100,11 +108,12 @@ public class GameViewModel extends ViewModel {
 
     private void parseData(Mobileview body) {
         // Parse Image and Title
-        CompleteArticle a = new CompleteArticle(body.getDisplaytitle(), body.getThumb().getUrl());
+        String imageUrl = body.getThumb() == null || TextUtils.isEmpty(body.getThumb().getUrl()) ? null : "https:" + body.getThumb().getUrl();
+        CompleteArticle a = new CompleteArticle(Jsoup.clean(body.getDisplaytitle(), Whitelist.none()), imageUrl);
 
         // Parse Complete text
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < 5 && i < body.getSections().size(); i++)
+        for (int i = 0; i < body.getSections().size() && builder.length() < 1000; i++)
             builder.append(Jsoup.clean(body.getSections().get(0).getText(), Whitelist.none()));
 
         a.setCompleteText(builder.toString());
@@ -113,11 +122,14 @@ public class GameViewModel extends ViewModel {
         a.setWords(Utils.splitWords(a.getCompleteText()));
 
         // Generate random indexes for random words.
-        a.setMissingWordIndexes(new HashSet<>());
-        while (a.getMissingWordIndexes().size() < 10) {
+        HashSet<Integer> missingIndexes = new HashSet<>();
+        while (missingIndexes.size() < 10) {
             int randomIndex = ThreadLocalRandom.current().nextInt(0, a.getWords().length);
-            a.getMissingWordIndexes().add(randomIndex);
+            missingIndexes.add(randomIndex);
         }
+        a.setMissingWordIndexes(missingIndexes);
+
+        a.setUserWords(new HashMap());
 
         article.setValue(a);
     }

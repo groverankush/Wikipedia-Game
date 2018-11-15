@@ -18,6 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/margin_medium"
             android:orientation="vertical">
 
             <TextView
@@ -25,13 +26,14 @@
                 style="@style/TextAppearance.MaterialComponents.Headline3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:textColor="@android:color/black"
                 tools:text="TITLE" />
 
             <ImageView
                 android:id="@+id/iv_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_large"
                 android:scaleType="centerCrop"

@@ -3,10 +3,13 @@ package com.ankushgrover.letswiki.utils;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 
+import com.ankushgrover.letswiki.R;
 import com.ankushgrover.letswiki.data.model.Word;
 import com.ankushgrover.letswiki.ui.wiki.spans.ClickSpan;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -29,57 +32,52 @@ public class Utils {
         return words;
     }
 
-    public static SpannableString makeParagraph(Word[] words, HashSet<Integer> missingWords, Word[] userWords) {
+    public static SpannableString makeParagraph(Word[] words, HashSet<Integer> missingWords, HashMap<Integer, Word> userWords, ClickSpan.OnWordClickListener listener) {
 
-        StringBuilder builder = new StringBuilder();
 
         // Create raw paragraph
-        for (Word word : words) {
-            String temp = word.getWord();
-            if (missingWords.contains(word.getWordIndex()) && userWords[word.getWordIndex()] == null)
+        int startIndex = 0;
+        for (int i = 0; i < words.length; i++) {
+
+            String temp = words[i].getWord();
+            if (missingWords.contains(words[i].getWordIndex()) && !userWords.containsKey(i)) {
                 temp = getDash();
-                // TODO Use a wild card for this as well.
-            else if (missingWords.contains(word.getWordIndex()) && userWords[word.getWordIndex()] != null)
-                temp = userWords[word.getWordIndex()].getWord();
-            builder.append(temp);
+                words[i] = new Word(startIndex, startIndex + temp.length(), i, temp, Word.SpecialCase.MISSING);
+            } else if (missingWords.contains(words[i].getWordIndex()) && userWords.containsKey(i)) {
+                temp = userWords.get(i).getWord();
+                words[i] = new Word(startIndex, startIndex + temp.length(), i, temp, Word.SpecialCase.FILLED);
+            }
+            startIndex += temp.length() + 1;
         }
+
 
         // Add spans
-        int index = 0;
-        while (index < builder.length()) {
-
-        }
-
-        SpannableStringBuilder paraBuilder = new SpannableStringBuilder();
-
-        String s;
-        s.
-
-
+        SpannableStringBuilder builder = new SpannableStringBuilder();
         for (Word word : words) {
-            SpannableString string;
-            if (missingWords.contains(word.getWordIndex()) && !userWords.contains(word.getWordIndex())) {
-                string = new SpannableString(getDashes(word.getWord().length()));
-                string.setSpan(new ClickSpan(word), word.getStartIndex(), word.getEndIndex(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            } else if (missingWords.contains(word.getWordIndex()) && userWords.contains(word.getWordIndex())) {
-                // TODO LOGIC BUSTED! DO SOMETHING
+            SpannableString string = new SpannableString(word.getWord());
+            if (word.getSpecialCase() == Word.SpecialCase.MISSING)
+                string.setSpan(new ClickSpan(word, listener), 0, word.getWord().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            else if (word.getSpecialCase() == Word.SpecialCase.FILLED) {
+                string.setSpan(new ForegroundColorSpan(R.attr.colorAccent) , 0, word.getWord().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
+            builder.append(string);
+            builder.append(" ");
         }
 
-        return null;
+
+        return SpannableString.valueOf(builder);
     }
 
-    private static String getDashes(int size) {
+    /*private static String getDashes(int size) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < size; i++) {
             builder.append("_");
         }
         return builder.toString();
-    }
+    }*/
 
     private static String getDash() {
-        // TODO use some other wild card
-        return "*_____*";
+        return "_____";
     }
 
 /*    public void fun(){

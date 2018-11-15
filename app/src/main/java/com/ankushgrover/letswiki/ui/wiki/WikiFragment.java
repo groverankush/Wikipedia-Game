@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +22,21 @@ import android.widget.Toast;
 
 import com.ankushgrover.letswiki.R;
 import com.ankushgrover.letswiki.base.BaseFragment;
+import com.ankushgrover.letswiki.data.model.Word;
+import com.ankushgrover.letswiki.ui.wiki.spans.ClickSpan;
+import com.ankushgrover.letswiki.utils.Utils;
 import com.ankushgrover.letswiki.viewmodel.GameViewModel;
 import com.squareup.picasso.Picasso;
+
+import java.util.Arrays;
 
 /**
  * Created by Ankush Grover(ankushgrover02@gmail.com) on 15/8/18.
  */
 public class WikiFragment extends BaseFragment {
+
+    private static final String TAG = WikiFragment.class.getSimpleName();
+
     private static final String KEY_IS_RESULT = "isResultKey";
     private static final String KEY_TIME_LEFT = "keyTimeLeft";
 
@@ -108,8 +118,20 @@ public class WikiFragment extends BaseFragment {
                 return;
             }
 
+            manageProgressBar(false);
             mTitle.setText(completeArticle.getTitle());
             Picasso.get().load(completeArticle.getImageUrl()).into(mIcon);
+            mPara.setText(Utils.makeParagraph(Arrays.copyOf(completeArticle.getWords(), completeArticle.getWords().length),
+                    completeArticle.getMissingWordIndexes(),
+                    completeArticle.getUserWords(),
+                    new ClickSpan.OnWordClickListener() {
+                        @Override
+                        public void onWordClick(Word word) {
+                            Log.d(TAG,"WORD CLICKED");
+                        }
+                    }));
+            mPara.setMovementMethod(new LinkMovementMethod());
+
 
 
         });
