@@ -11,16 +11,23 @@ import com.ankushgrover.letswiki.data.model.Word;
  */
 public class ClickSpan extends ClickableSpan {
 
+    // The word which is added to the span.
     private Word word;
+    private OnWordClickListener listener;
 
-    public ClickSpan(Word word) {
+    public ClickSpan(@NonNull Word word, @NonNull OnWordClickListener listener) {
 
         this.word = word;
+        this.listener = listener;
     }
 
     @Override
     public void onClick(@NonNull View widget) {
+        listener.onWordClick(word);
+    }
 
+    public interface OnWordClickListener {
+        void onWordClick(Word word);
     }
 
 }

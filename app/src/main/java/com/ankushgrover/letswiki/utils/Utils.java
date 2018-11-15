@@ -29,9 +29,31 @@ public class Utils {
         return words;
     }
 
-    public static SpannableString makeParagraph(Word[] words, HashSet<Integer> missingWords, HashSet<Integer> userWords, boolean isAnswer) {
+    public static SpannableString makeParagraph(Word[] words, HashSet<Integer> missingWords, Word[] userWords) {
+
+        StringBuilder builder = new StringBuilder();
+
+        // Create raw paragraph
+        for (Word word : words) {
+            String temp = word.getWord();
+            if (missingWords.contains(word.getWordIndex()) && userWords[word.getWordIndex()] == null)
+                temp = getDash();
+            else if (missingWords.contains(word.getWordIndex()) && userWords[word.getWordIndex()] != null)
+                temp = userWords[word.getWordIndex()].getWord();
+            builder.append(temp);
+        }
+
+        // Add spans
+        int index = 0;
+        while (index<builder.length()){
+
+        }
 
         SpannableStringBuilder paraBuilder = new SpannableStringBuilder();
+
+        String s;
+        s.
+
 
         for (Word word : words) {
             SpannableString string;
@@ -52,6 +74,10 @@ public class Utils {
             builder.append("_");
         }
         return builder.toString();
+    }
+
+    private static String getDash() {
+        return "*_____*";
     }
 
 /*    public void fun(){
