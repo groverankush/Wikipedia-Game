@@ -38,6 +38,7 @@ public class Utils {
             String temp = word.getWord();
             if (missingWords.contains(word.getWordIndex()) && userWords[word.getWordIndex()] == null)
                 temp = getDash();
+                // TODO Use a wild card for this as well.
             else if (missingWords.contains(word.getWordIndex()) && userWords[word.getWordIndex()] != null)
                 temp = userWords[word.getWordIndex()].getWord();
             builder.append(temp);
@@ -45,7 +46,7 @@ public class Utils {
 
         // Add spans
         int index = 0;
-        while (index<builder.length()){
+        while (index < builder.length()) {
 
         }
 
@@ -77,6 +78,7 @@ public class Utils {
     }
 
     private static String getDash() {
+        // TODO use some other wild card
         return "*_____*";
     }
 
