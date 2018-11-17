@@ -31,8 +31,7 @@
     <dimen name="text_size_large_3">28sp</dimen>
     <dimen name="text_size_large_4">30sp</dimen>
     <dimen name="text_size_xlarge_1">42sp</dimen>
-
-
+    <dimen name="standard_elevation">4dp</dimen>
 
 
 </resources>

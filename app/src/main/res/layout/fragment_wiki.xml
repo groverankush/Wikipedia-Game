@@ -7,79 +7,88 @@
     android:layout_height="match_parent"
     tools:context=".ui.wiki.WikiFragment">
 
-    <ScrollView
-        android:id="@+id/scroll_view"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:layout_margin="@dimen/margin_normal"
+        android:elevation="@dimen/standard_elevation">
 
-
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/margin_medium">
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-            <TextView
-                android:id="@+id/tv_title"
-                style="@style/TextAppearance.MaterialComponents.Headline3"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_medium">
 
-                android:textColor="@android:color/black"
-                tools:text="TITLE" />
+                <TextView
+                    android:id="@+id/tv_title"
+                    style="@style/TextAppearance.MaterialComponents.Headline3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-            <ImageView
-                android:id="@+id/iv_icon"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/margin_large"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/description_wiki_image_view" />
+                    android:textColor="@android:color/black"
+                    tools:text="TITLE" />
+
+                <ImageView
+                    android:id="@+id/iv_icon"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:contentDescription="@string/description_wiki_image_view"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/tv_para"
+                    style="@style/TextAppearance.MaterialComponents.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor vehicula elit id commodo. Aliquam sollicitudin posuere odio, in porttitor est scelerisque varius. Duis eget magna lectus. Donec vehicula accumsan efficitur. Nullam vitae lorem blandit, dignissim tortor sit amet, dictum leo. Phasellus molestie mi et maximus congue. Praesent venenatis id dui et tempus. Praesent rhoncus consequat tortor. Mauris rhoncus ante tempus sodales ultricies. Vestibulum in commodo turpis.\n\nNullam quis gravida mauris, vel varius enim. Sed quis lacus eleifend, posuere ante quis, lacinia lectus. Mauris non porttitor magna. Aenean accumsan, sem sed malesuada bibendum, metus odio sodales sapien, vel convallis velit diam nec tellus. Duis egestas sapien tortor, sit amet aliquam lorem rhoncus in. Aenean dui libero, tincidunt eu ipsum non, fermentum sodales enim. Pellentesque iaculis justo eu tellus venenatis, sodales faucibus metus vestibulum. Cras posuere urna tristique condimentum lacinia. Integer interdum, nulla at mollis semper, risus lectus iaculis felis, a efficitur magna sem id leo. Suspendisse ut justo auctor, gravida purus ac, maximus metus. Integer eget suscipit erat, nec placerat justo. Mauris non ante neque. Fusce bibendum faucibus aliquam. Phasellus id lacus venenatis ante maximus rutrum at ac justo. Etiam suscipit interdum leo, at egestas ligula vestibulum eget. Suspendisse lacinia faucibus magna id varius." />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <FrameLayout
+            android:id="@+id/bottom_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fabSize="normal" />
 
             <TextView
-                android:id="@+id/tv_para"
-                style="@style/TextAppearance.MaterialComponents.Body1"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_submit"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor vehicula elit id commodo. Aliquam sollicitudin posuere odio, in porttitor est scelerisque varius. Duis eget magna lectus. Donec vehicula accumsan efficitur. Nullam vitae lorem blandit, dignissim tortor sit amet, dictum leo. Phasellus molestie mi et maximus congue. Praesent venenatis id dui et tempus. Praesent rhoncus consequat tortor. Mauris rhoncus ante tempus sodales ultricies. Vestibulum in commodo turpis.\n\nNullam quis gravida mauris, vel varius enim. Sed quis lacus eleifend, posuere ante quis, lacinia lectus. Mauris non porttitor magna. Aenean accumsan, sem sed malesuada bibendum, metus odio sodales sapien, vel convallis velit diam nec tellus. Duis egestas sapien tortor, sit amet aliquam lorem rhoncus in. Aenean dui libero, tincidunt eu ipsum non, fermentum sodales enim. Pellentesque iaculis justo eu tellus venenatis, sodales faucibus metus vestibulum. Cras posuere urna tristique condimentum lacinia. Integer interdum, nulla at mollis semper, risus lectus iaculis felis, a efficitur magna sem id leo. Suspendisse ut justo auctor, gravida purus ac, maximus metus. Integer eget suscipit erat, nec placerat justo. Mauris non ante neque. Fusce bibendum faucibus aliquam. Phasellus id lacus venenatis ante maximus rutrum at ac justo. Etiam suscipit interdum leo, at egestas ligula vestibulum eget. Suspendisse lacinia faucibus magna id varius." />
+                android:layout_gravity="center"
+                android:elevation="6dp"
+                android:textColor="@color/fab_text_color"
+                android:textSize="@dimen/text_size_large_2"
+                tools:text="60" />
+        </FrameLayout>
 
-        </LinearLayout>
-    </ScrollView>
-
-    <FrameLayout
-        android:id="@+id/bottom_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fabSize="normal" />
-
-        <TextView
-            android:id="@+id/tv_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:elevation="6dp"
-            android:textColor="@color/fab_text_color"
-            android:textSize="@dimen/text_size_large_2"
-            tools:text="60" />
-    </FrameLayout>
+    </android.support.v7.widget.CardView>
 
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:elevation="@dimen/standard_elevation"
         android:visibility="gone"
         tools:visibility="visible" />
 
