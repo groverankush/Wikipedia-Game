@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModel;
  */
 public class MainViewModel extends ViewModel {
     private boolean isDifficult;
+    private int gameScore;
 
     public boolean isDifficult() {
         return isDifficult;
@@ -14,5 +15,13 @@ public class MainViewModel extends ViewModel {
 
     public void setDifficult(boolean difficult) {
         isDifficult = difficult;
+    }
+
+    public int getGameScore() {
+        return gameScore;
+    }
+
+    public void setGameScore(int gameScore) {
+        this.gameScore = gameScore;
     }
 }

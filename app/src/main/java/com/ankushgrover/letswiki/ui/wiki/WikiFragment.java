@@ -1,15 +1,15 @@
 package com.ankushgrover.letswiki.ui.wiki;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +24,9 @@ import com.ankushgrover.letswiki.R;
 import com.ankushgrover.letswiki.base.BaseFragment;
 import com.ankushgrover.letswiki.data.model.Word;
 import com.ankushgrover.letswiki.ui.wiki.spans.ClickSpan;
+import com.ankushgrover.letswiki.ui.wiki.wordsDilaog.LeftWordsDialogFragment;
 import com.ankushgrover.letswiki.utils.Utils;
-import com.ankushgrover.letswiki.viewmodel.GameViewModel;
 import com.squareup.picasso.Picasso;
-
-import java.util.Arrays;
 
 /**
  * Created by Ankush Grover(ankushgrover02@gmail.com) on 15/8/18.
@@ -46,7 +44,6 @@ public class WikiFragment extends BaseFragment {
     private TextView mSubmitTv;
     private CountDownTimer mTimer;
     private long mTimeLeft = 60 * 1000; // milliseconds.
-    private GameViewModel mGameModel;
     private ProgressBar mProgress;
     private FrameLayout mBottomFabContainer;
     private ScrollView mScrollView;
@@ -104,40 +101,49 @@ public class WikiFragment extends BaseFragment {
 
 
         initView(view);
-        mGameModel = ViewModelProviders.of(this).get(GameViewModel.class);
+
+
         observeArticle();
         if (mListener.getMainViewModel().isDifficult() && !mIsResult)
             initTimer();
     }
 
     private void observeArticle() {
-        mGameModel.article.observe(this, completeArticle -> {
+        removeObservers();
+        FragmentManager manager = getChildFragmentManager();
+        mListener.getGameViewModel().article.observe(getViewLifecycleOwner(), completeArticle -> {
             if (completeArticle == null) {
                 Toast.makeText(getActivity(), R.string.generic_error, Toast.LENGTH_SHORT).show();
+                //removeObservers();
                 mListener.playAgain();
                 return;
             }
+            if (completeArticle.isEmpty())
+                return;
 
             manageProgressBar(false);
             mTitle.setText(completeArticle.getTitle());
             Picasso.get().load(completeArticle.getImageUrl()).into(mIcon);
-            mPara.setText(Utils.makeParagraph(Arrays.copyOf(completeArticle.getWords(), completeArticle.getWords().length),
-                    completeArticle.getMissingWordIndexes(),
-                    completeArticle.getUserWords(),
-                    new ClickSpan.OnWordClickListener() {
-                        @Override
-                        public void onWordClick(Word word) {
-                            Log.d(TAG,"WORD CLICKED");
-                        }
-                    }));
+            mIcon.setVisibility(TextUtils.isEmpty(completeArticle.getImageUrl()) ? View.GONE : View.VISIBLE);
+
+            if (mIsResult) {
+                mPara.setText(Utils.makeResultParagraph(getActivity(), completeArticle));
+                //removeObservers();
+            } else
+                mPara.setText(Utils.makeParagraph(getActivity(), completeArticle, new ClickSpan.OnWordClickListener() {
+                    @Override
+                    public void onWordClick(Word word) {
+                        LeftWordsDialogFragment.newInstance(word.getWordIndex())
+                                .show(manager, TAG);
+                    }
+                }));
             mPara.setMovementMethod(new LinkMovementMethod());
 
 
-
         });
-        if (mGameModel.article.getValue() == null) {
+        if (mListener.getGameViewModel().article.getValue() == null || mListener.getGameViewModel().article.getValue().isEmpty()) {
             manageProgressBar(true);
-            mGameModel.getTitleList();
+            mListener.getGameViewModel().getTitleList();
         } else manageProgressBar(false);
 
     }
@@ -174,13 +180,21 @@ public class WikiFragment extends BaseFragment {
 
         mSubmitFab.setOnClickListener(v -> {
 
-            if (mIsResult)
+            if (mIsResult) {
                 mListener.closeResultWiki();
-            else if (mListener.getMainViewModel().isDifficult())
+                //removeObservers();
+            } else if (mListener.getMainViewModel().isDifficult())
                 showSubmitDialog(view.getContext());
-            else
+            else {
                 mListener.submit();
+                //removeObservers();
+            }
+
         });
+    }
+
+    private void removeObservers() {
+        mListener.getGameViewModel().article.removeObservers(getViewLifecycleOwner());
     }
 
     private void initTimer() {

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ankushgrover.letswiki.R;
 import com.ankushgrover.letswiki.base.BaseFragment;
@@ -49,9 +50,10 @@ public class ScoreFragment extends BaseFragment {
     private void initView(View view) {
         view.findViewById(R.id.btn_results).setOnClickListener(v -> mListener.showResults());
         view.findViewById(R.id.btn_play_again).setOnClickListener(v -> mListener.playAgain());
+        ((TextView) view.findViewById(R.id.tv_score)).setText(String.valueOf(mListener.getMainViewModel().getGameScore()));
     }
 
-    public interface ScoreListener {
+    public interface ScoreListener extends BaseFragmentListener {
         void showResults();
 
         void playAgain();

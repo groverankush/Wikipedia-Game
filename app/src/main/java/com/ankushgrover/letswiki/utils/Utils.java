@@ -1,14 +1,20 @@
 package com.ankushgrover.letswiki.utils;
 
+import android.arch.lifecycle.LiveData;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 
 import com.ankushgrover.letswiki.R;
+import com.ankushgrover.letswiki.data.model.CompleteArticle;
 import com.ankushgrover.letswiki.data.model.Word;
 import com.ankushgrover.letswiki.ui.wiki.spans.ClickSpan;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -32,7 +38,25 @@ public class Utils {
         return words;
     }
 
-    public static SpannableString makeParagraph(Word[] words, HashSet<Integer> missingWords, HashMap<Integer, Word> userWords, ClickSpan.OnWordClickListener listener) {
+    public static SpannableString makeResultParagraph(Context context, CompleteArticle article) {
+
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+
+        for (Word word : article.getWords()) {
+            SpannableString string = new SpannableString(word.getWord());
+            if (article.getMissingWordIndexes().contains(word.getWordIndex()))
+                string.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, android.R.color.holo_green_dark)), 0, word.getWord().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.append(string);
+            builder.append(" ");
+        }
+        return SpannableString.valueOf(builder);
+    }
+
+    public static SpannableString makeParagraph(Context context, CompleteArticle article, ClickSpan.OnWordClickListener listener) {
+
+        Word[] words = Arrays.copyOf(article.getWords(), article.getWords().length);
+        HashSet<Integer> missingWords = article.getMissingWordIndexes();
+        HashMap<Integer, Word> userWords = article.getUserWords();
 
 
         // Create raw paragraph
@@ -55,10 +79,49 @@ public class Utils {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         for (Word word : words) {
             SpannableString string = new SpannableString(word.getWord());
-            if (word.getSpecialCase() == Word.SpecialCase.MISSING)
+            if (word.getSpecialCase() == Word.SpecialCase.MISSING) {
                 string.setSpan(new ClickSpan(word, listener), 0, word.getWord().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            else if (word.getSpecialCase() == Word.SpecialCase.FILLED) {
-                string.setSpan(new ForegroundColorSpan(R.attr.colorAccent) , 0, word.getWord().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else if (word.getSpecialCase() == Word.SpecialCase.FILLED) {
+                string.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorAccent)), 0, word.getWord().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            builder.append(string);
+            builder.append(" ");
+        }
+
+
+        return SpannableString.valueOf(builder);
+
+
+    }
+
+/*
+    public static SpannableString makeParagraph(Context context, Word[] words, HashSet<Integer> missingWords, HashMap<Integer, Word> userWords, ClickSpan.OnWordClickListener listener) {
+
+
+        // Create raw paragraph
+        int startIndex = 0;
+        for (int i = 0; i < words.length; i++) {
+
+            String temp = words[i].getWord();
+            if (missingWords.contains(words[i].getWordIndex()) && !userWords.containsKey(i)) {
+                temp = getDash();
+                words[i] = new Word(startIndex, startIndex + temp.length(), i, temp, Word.SpecialCase.MISSING);
+            } else if (missingWords.contains(words[i].getWordIndex()) && userWords.containsKey(i)) {
+                temp = userWords.get(i).getWord();
+                words[i] = new Word(startIndex, startIndex + temp.length(), i, temp, Word.SpecialCase.FILLED);
+            }
+            startIndex += temp.length() + 1;
+        }
+
+
+        // Add spans
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        for (Word word : words) {
+            SpannableString string = new SpannableString(word.getWord());
+            if (word.getSpecialCase() == Word.SpecialCase.MISSING) {
+                string.setSpan(new ClickSpan(word, listener), 0, word.getWord().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else if (word.getSpecialCase() == Word.SpecialCase.FILLED) {
+                string.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorAccent)), 0, word.getWord().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             builder.append(string);
             builder.append(" ");
@@ -67,6 +130,40 @@ public class Utils {
 
         return SpannableString.valueOf(builder);
     }
+*/
+
+
+    private static String getDash() {
+        return "__________";
+    }
+
+
+    public static ArrayList<Word> getMissingWords(LiveData<CompleteArticle> data) {
+        CompleteArticle article = data.getValue();
+        assert article != null;
+        ArrayList<Word> words = new ArrayList<>();
+        HashSet<Integer> usedWordIndexes = new HashSet<>();
+        for (Word word : article.getUserWords().values()) {
+            usedWordIndexes.add(word.getWordIndex());
+        }
+
+        for (Integer index : article.getMissingWordIndexes()) {
+            if (!usedWordIndexes.contains(index))
+                words.add(article.getWords()[index]);
+        }
+
+        return words;
+    }
+
+    public static int calculateScore(CompleteArticle article) {
+        int score = 0;
+        for (Integer index : article.getUserWords().keySet()) {
+            if (article.getWords()[index].equals(article.getUserWords().get(index)))
+                ++score;
+        }
+        return score;
+    }
+
 
     /*private static String getDashes(int size) {
         StringBuilder builder = new StringBuilder();
@@ -76,9 +173,7 @@ public class Utils {
         return builder.toString();
     }*/
 
-    private static String getDash() {
-        return "_____";
-    }
+
 
 /*    public void fun(){
 

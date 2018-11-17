@@ -10,6 +10,8 @@ import com.ankushgrover.letswiki.base.BaseFragment;
 import com.ankushgrover.letswiki.ui.launch.LaunchFragment;
 import com.ankushgrover.letswiki.ui.score.ScoreFragment;
 import com.ankushgrover.letswiki.ui.wiki.WikiFragment;
+import com.ankushgrover.letswiki.utils.Utils;
+import com.ankushgrover.letswiki.viewmodel.GameViewModel;
 import com.ankushgrover.letswiki.viewmodel.MainViewModel;
 
 public class MainActivity extends BaseActivity implements LaunchFragment.LaunchFragmentListener, WikiFragment.WikiListener, ScoreFragment.ScoreListener {
@@ -73,6 +75,8 @@ public class MainActivity extends BaseActivity implements LaunchFragment.LaunchF
 
     @Override
     public void submit() {
+
+        getMainViewModel().setGameScore(Utils.calculateScore(getGameViewModel().article.getValue()));
         replaceFragment(new ScoreFragment(), true);
     }
 
@@ -88,11 +92,18 @@ public class MainActivity extends BaseActivity implements LaunchFragment.LaunchF
 
     @Override
     public void playAgain() {
+        getGameViewModel().startNewGame();
+        getMainViewModel().setGameScore(0);
         replaceFragment(new LaunchFragment(), true);
     }
 
     @Override
     public MainViewModel getMainViewModel() {
         return ViewModelProviders.of(this).get(MainViewModel.class);
+    }
+
+    @Override
+    public GameViewModel getGameViewModel() {
+        return ViewModelProviders.of(this).get(GameViewModel.class);
     }
 }

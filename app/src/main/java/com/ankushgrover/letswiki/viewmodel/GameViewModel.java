@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ankushgrover.letswiki.data.model.CompleteArticle;
-import com.ankushgrover.letswiki.data.model.Word;
 import com.ankushgrover.letswiki.data.model.article.ArticleResponse;
 import com.ankushgrover.letswiki.data.model.article.Mobileview;
 import com.ankushgrover.letswiki.data.model.title.Article;
@@ -35,12 +34,12 @@ public class GameViewModel extends ViewModel {
 
     private static final String TAG = GameViewModel.class.getSimpleName();
 
-    public MutableLiveData<CompleteArticle> article = new MutableLiveData<>();
 
+    public MutableLiveData<CompleteArticle> article = new MutableLiveData<>();
 
     public void getTitleList() {
 
-        if (article.getValue() != null)
+        if (article.getValue() != null && !article.getValue().isEmpty())
             return;
 
         long days = ThreadLocalRandom.current().nextInt(0, 10) * 24 * 60 * 60 * 1000;
@@ -81,8 +80,13 @@ public class GameViewModel extends ViewModel {
         });
     }
 
-    public void finishGame() {
-        article.setValue(null);
+    public void updateArticle() {
+        if (article.getValue() != null)
+            article.setValue(article.getValue());
+    }
+
+    public void startNewGame() {
+        article.setValue(CompleteArticle.getEmptyInstance());
     }
 
     private void getCompleteArticle(String title) {

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ankushgrover.letswiki.viewmodel.GameViewModel;
 import com.ankushgrover.letswiki.viewmodel.MainViewModel;
 
 
@@ -93,5 +94,7 @@ public class BaseFragment extends Fragment {
 
     protected interface BaseFragmentListener {
         MainViewModel getMainViewModel();
+
+        GameViewModel getGameViewModel();
     }
 }
