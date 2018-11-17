@@ -1,6 +1,7 @@
 package com.ankushgrover.letswiki.ui.scoreglobalrank;
 
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,17 +15,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ankushgrover.letswiki.R;
+import com.ankushgrover.letswiki.base.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ScoreGlobalRankFragment extends Fragment {
+public class ScoreGlobalRankFragment extends BaseFragment {
 
+
+    private ScoreGlobalRankListener mListener;
 
     public ScoreGlobalRankFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ScoreGlobalRankListener) {
+            mListener = (ScoreGlobalRankListener) context;
+        } else
+            throw new RuntimeException("The passed context doesn't implements ScoreGlobalRankListener");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,8 +49,10 @@ public class ScoreGlobalRankFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         setTrophyIcon(view, 3);
     }
+
 
     private void setTrophyIcon(View v, int rank) {
         ImageView trophy = v.findViewById(R.id.iv_trophy);
@@ -61,6 +75,9 @@ public class ScoreGlobalRankFragment extends Fragment {
         ContextThemeWrapper wrapper = new ContextThemeWrapper(v.getContext(), theme);
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trophy, wrapper.getTheme());
         trophy.setImageDrawable(drawable);
+    }
+
+    public interface ScoreGlobalRankListener extends BaseFragmentListener {
     }
 
 }

@@ -9,12 +9,16 @@ import com.ankushgrover.letswiki.base.BaseActivity;
 import com.ankushgrover.letswiki.base.BaseFragment;
 import com.ankushgrover.letswiki.ui.launch.LaunchFragment;
 import com.ankushgrover.letswiki.ui.score.ScoreFragment;
+import com.ankushgrover.letswiki.ui.scoreglobalrank.ScoreGlobalRankFragment;
+import com.ankushgrover.letswiki.ui.scoreglobalrank.ScoreGlobalRankViewModel;
 import com.ankushgrover.letswiki.ui.wiki.WikiFragment;
 import com.ankushgrover.letswiki.utils.Utils;
 import com.ankushgrover.letswiki.viewmodel.GameViewModel;
 import com.ankushgrover.letswiki.viewmodel.MainViewModel;
 
-public class MainActivity extends BaseActivity implements LaunchFragment.LaunchFragmentListener, WikiFragment.WikiListener, ScoreFragment.ScoreListener {
+public class MainActivity extends BaseActivity implements LaunchFragment.LaunchFragmentListener,
+        WikiFragment.WikiListener, ScoreFragment.ScoreListener,
+        ScoreGlobalRankFragment.ScoreGlobalRankListener {
 
     private static final String KEY_CURRENT_FRAGMENT = "keyCurrentFragment";
     private BaseFragment currentFragment;
@@ -76,7 +80,10 @@ public class MainActivity extends BaseActivity implements LaunchFragment.LaunchF
     @Override
     public void submit() {
 
-        getMainViewModel().setGameScore(Utils.calculateScore(getGameViewModel().article.getValue()));
+        assert getGameViewModel().article.getValue() != null;
+        int score = Utils.calculateScore(getGameViewModel().article.getValue());
+        getScoreViewModel().updateScore(score);
+        getMainViewModel().setGameScore(score);
         replaceFragment(new ScoreFragment(), true);
     }
 
@@ -105,5 +112,10 @@ public class MainActivity extends BaseActivity implements LaunchFragment.LaunchF
     @Override
     public GameViewModel getGameViewModel() {
         return ViewModelProviders.of(this).get(GameViewModel.class);
+    }
+
+    @Override
+    public ScoreGlobalRankViewModel getScoreViewModel() {
+        return ViewModelProviders.of(this).get(ScoreGlobalRankViewModel.class);
     }
 }
