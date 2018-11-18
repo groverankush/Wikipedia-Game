@@ -13,7 +13,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="submit">Submit</string>
     <string name="score_colon">Score:</string>
-    <string name="rank_colon">Rank:</string>
+    <string name="rank_colon">Rank :</string>
     <string name="generic_error">Something went wrong!</string>
     <string name="description_wiki_image_view">Image describing the wiki article.</string>
 </resources>

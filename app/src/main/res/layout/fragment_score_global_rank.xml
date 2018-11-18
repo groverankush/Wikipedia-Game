@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -14,8 +13,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/score_colon"
-            android:textStyle="bold"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_score"
@@ -23,12 +22,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
             android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:text="50" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_rank_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -36,8 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rank_colon"
-            android:textStyle="bold"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_rank"
@@ -46,16 +45,14 @@
             android:layout_marginStart="@dimen/margin_normal"
             android:textColor="@color/colorAccent"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="1" />
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/iv_trophy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_trophy" />
+            android:scaleType="centerCrop" />
 
 
     </LinearLayout>

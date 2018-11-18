@@ -26,7 +26,7 @@ public class ScoreGlobalRankViewModel extends ViewModel {
     MutableLiveData<Long> rankLiveData = new MutableLiveData<>();
 
     public ScoreGlobalRankViewModel() {
-        //updateScore(0);
+        updateScore(0);
         listenScoreChanges();
     }
 
@@ -57,20 +57,29 @@ public class ScoreGlobalRankViewModel extends ViewModel {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "Datachane");
 
-                /*if (dataSnapshot == null)
-                    return;
+                try {
 
-                HashMap<String, Long> map = (HashMap<String, Long>) dataSnapshot.getValue();
-                String userKey = FirebaseAuth.getInstance().getUid();
-                Long currentScore = map.get(userKey);
-                Long currentRank = 1L;
-                for (String key : map.keySet()) {
-                    if (key.equals(userKey))
-                        continue;
-                    if (map.get(key))
-                }*/
+                    HashMap<String, Long> map = (HashMap<String, Long>) dataSnapshot.getValue();
+                    String userKey = FirebaseAuth.getInstance().getUid();
+                    if (map == null || !map.containsKey(userKey))
+                        return;
+                    Long currentRank = (long) map.size();
+
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+
+
+                        if (data.getKey().equals(userKey)) {
+                            rankLiveData.setValue(currentRank);
+                            break;
+                        }
+                        currentRank--;
+
+                    }
+
+                } catch (Exception e) {
+                    rankLiveData.setValue(-1L);
+                }
 
             }
 
@@ -82,7 +91,7 @@ public class ScoreGlobalRankViewModel extends ViewModel {
         });
     }
 
-    public DatabaseReference getDatabase() {
+    private DatabaseReference getDatabase() {
         assert FirebaseAuth.getInstance().getUid() != null;
         return FirebaseDatabase.getInstance().getReference().child(KEY_SCORE).child(FirebaseAuth.getInstance().getUid());
     }

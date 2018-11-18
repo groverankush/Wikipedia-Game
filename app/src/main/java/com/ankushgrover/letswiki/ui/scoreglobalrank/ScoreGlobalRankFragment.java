@@ -1,6 +1,7 @@
 package com.ankushgrover.letswiki.ui.scoreglobalrank;
 
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ankushgrover.letswiki.R;
 import com.ankushgrover.letswiki.base.BaseFragment;
@@ -24,6 +26,7 @@ public class ScoreGlobalRankFragment extends BaseFragment {
 
 
     private ScoreGlobalRankListener mListener;
+    private View view;
 
     public ScoreGlobalRankFragment() {
         // Required empty public constructor
@@ -39,7 +42,7 @@ public class ScoreGlobalRankFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_score_global_rank, container, false);
@@ -49,32 +52,59 @@ public class ScoreGlobalRankFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        this.view = view;
+        mListener.getScoreViewModel().rankLiveData.removeObservers(getViewLifecycleOwner());
+        mListener.getScoreViewModel().rankLiveData.observe(getViewLifecycleOwner(), new Observer<Long>() {
+            @Override
+            public void onChanged(@Nullable Long rank) {
+                setRank(rank);
+            }
+        });
 
-        setTrophyIcon(view, 3);
+        mListener.getScoreViewModel().scoreLiveData.removeObservers(getViewLifecycleOwner());
+        mListener.getScoreViewModel().scoreLiveData.observe(getViewLifecycleOwner(), new Observer<Long>() {
+            @Override
+            public void onChanged(@Nullable Long score) {
+                setScore(score);
+            }
+        });
+
+
     }
 
+    private void setRank(Long rank) {
 
-    private void setTrophyIcon(View v, int rank) {
-        ImageView trophy = v.findViewById(R.id.iv_trophy);
+        view.findViewById(R.id.ll_rank_container).setVisibility((rank == null || rank == -1) ? View.GONE : View.VISIBLE);
+        ((TextView) view.findViewById(R.id.tv_rank)).setText(String.valueOf(rank));
+        setTrophyIcon(rank);
+
+
+    }
+
+    private void setTrophyIcon(Long rank) {
+
+        ImageView trophy = view.findViewById(R.id.iv_trophy);
+        trophy.setVisibility(View.VISIBLE);
         int theme = -1;
 
-        switch (rank) {
-            case 1:
-                theme = R.style.FirstPosition;
-                break;
-            case 2:
-                theme = R.style.SecondPosition;
-                break;
-            case 3:
-                theme = R.style.ThirdPosition;
-                break;
-            default:
-                theme = R.style.OtherPositions;
-                break;
-        }
-        ContextThemeWrapper wrapper = new ContextThemeWrapper(v.getContext(), theme);
+        if (rank == null || rank <= -1 || rank > 3)
+            trophy.setVisibility(View.GONE);
+        else if (rank == 1)
+            theme = R.style.FirstPosition;
+        else if (rank == 2)
+            theme = R.style.SecondPosition;
+        else if (rank == 3)
+            theme = R.style.ThirdPosition;
+
+        ContextThemeWrapper wrapper = new ContextThemeWrapper(view.getContext(), theme);
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trophy, wrapper.getTheme());
         trophy.setImageDrawable(drawable);
+    }
+
+    private void setScore(Long score) {
+        if (score == null || score <= 0)
+            score = 0L;
+        ((TextView) view.findViewById(R.id.tv_score)).setText(String.valueOf(score));
     }
 
     public interface ScoreGlobalRankListener extends BaseFragmentListener {
