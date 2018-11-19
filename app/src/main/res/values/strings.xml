@@ -19,4 +19,6 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="trophy_content_desc">Image to show trophy based on position</string>
+    <string name="login_to">Login to</string>
+    <string name="_10">/10</string>
 </resources>
