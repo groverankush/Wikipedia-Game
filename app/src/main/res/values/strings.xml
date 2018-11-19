@@ -16,4 +16,7 @@
     <string name="rank_colon">Rank :</string>
     <string name="generic_error">Something went wrong!</string>
     <string name="description_wiki_image_view">Image describing the wiki article.</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="trophy_content_desc">Image to show trophy based on position</string>
 </resources>

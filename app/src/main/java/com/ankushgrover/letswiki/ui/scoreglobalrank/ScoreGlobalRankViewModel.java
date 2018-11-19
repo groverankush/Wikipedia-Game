@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class ScoreGlobalRankViewModel extends ViewModel {
 
     private static final String TAG = ScoreGlobalRankViewModel.class.getSimpleName();
-    private static final String KEY_SCORE = "score";
+    public static final String KEY_SCORE = "score";
 
     MutableLiveData<Long> scoreLiveData = new MutableLiveData<>();
     MutableLiveData<Long> rankLiveData = new MutableLiveData<>();
@@ -52,9 +52,8 @@ public class ScoreGlobalRankViewModel extends ViewModel {
     }
 
     private void listenScoreChanges() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(KEY_SCORE);
-        database.orderByValue();
-        database.addValueEventListener(new ValueEventListener() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference(KEY_SCORE);
+        database.orderByValue().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -71,6 +70,7 @@ public class ScoreGlobalRankViewModel extends ViewModel {
 
                         if (data.getKey().equals(userKey)) {
                             rankLiveData.setValue(currentRank);
+                            scoreLiveData.setValue((Long) data.getValue());
                             break;
                         }
                         currentRank--;

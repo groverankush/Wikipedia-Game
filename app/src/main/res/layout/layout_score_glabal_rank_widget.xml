@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_score_container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/ll_score_container"
     android:orientation="vertical"
     android:padding="@dimen/margin_normal">
+
+
+    <ImageView
+        android:id="@+id/iv_trophy"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:contentDescription="@string/trophy_content_desc"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -47,14 +57,6 @@
             android:textColor="@color/colorAccent"
             android:textSize="16sp"
             android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/iv_trophy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:scaleType="centerCrop" />
-
 
     </LinearLayout>
 

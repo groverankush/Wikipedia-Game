@@ -10,6 +10,11 @@ import android.widget.Toast;
 
 import com.ankushgrover.letswiki.R;
 import com.ankushgrover.letswiki.ui.MainActivity;
+import com.ankushgrover.letswiki.widget.ScoreGlobalRankJobService;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -54,7 +59,23 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+
         init();
+    }
+
+    private void startJob() {
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+
+
+        Job myJob = dispatcher.newJobBuilder()
+                .setService(ScoreGlobalRankJobService.class)
+                .setLifetime(Lifetime.FOREVER)
+                // the JobService that will be called
+                .setTag("my-unique-tag")        // uniquely identifies the job
+                .build();
+
+        dispatcher.mustSchedule(myJob);
+
     }
 
     private void init() {
@@ -97,8 +118,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void checkAndLaunchGame(FirebaseUser account) {
-        if (account != null)
+        if (account != null) {
+            startJob();
             startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+
     }
 
     @Override
